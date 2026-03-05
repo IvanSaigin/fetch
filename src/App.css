@@ -1,38 +1,161 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+.app {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+
+.todo-container {
+  background: white;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  flex: 1;
+}
+
+.todo-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 25px;
+  padding: 15px;
+  background: #f7f9fc;
+  border-radius: 10px;
+  font-size: 1em;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
+}
+
+.todo-list {
+  list-style: none;
+}
+
+.todo-item {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  padding: 20px;
+  margin-bottom: 12px;
+  background: #f8fafc;
+  border-radius: 10px;
+  border-left: 4px solid #667eea;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.todo-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+.todo-item.completed {
+  border-left-color: #48bb78;
+  opacity: 0.8;
+  background: #f0fff4;
+}
+
+.todo-content {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex: 1;
+}
+
+.todo-id {
+  font-size: 0.9em;
+  color: #718096;
+  background: #edf2f7;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-weight: 500;
+}
+
+.todo-title {
+  font-size: 1.1em;
+  color: #2d3748;
+  line-height: 1.4;
+}
+
+.todo-status {
+  min-width: 100px;
+  text-align: right;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85em;
+  font-weight: 500;
+}
+
+.completed-badge {
+  background: #48bb78;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.pending-badge {
+  background: #ed8936;
+  color: white;
 }
 
-@keyframes App-logo-spin {
-  from {
+.loader-container {
+  text-align: center;
+  padding: 50px;
+  background: white;
+  border-radius: 15px;
+  margin-top: 100px;
+}
+
+.loader {
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #667eea;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  0% {
     transform: rotate(0deg);
   }
-  to {
+
+  100% {
     transform: rotate(360deg);
   }
+}
+
+.error-container {
+  text-align: center;
+  padding: 50px;
+  background: white;
+  border-radius: 15px;
+  margin-top: 100px;
+}
+
+.error-message {
+  color: #e53e3e;
+  margin-bottom: 20px;
+  font-size: 1.2em;
+}
+
+.retry-button {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-size: 1em;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+.retry-button:hover {
+  background: #5a67d8;
 }
