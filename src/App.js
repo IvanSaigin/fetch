@@ -1,36 +1,79 @@
+// App.js
 import { useState, useEffect } from 'react';
 import './App.css';
+import InputForCreateTodo from './component/InputForCreateTodo/InputForCreateTodo'
+import TodoList from './component/TodoList/TodoList';
+import SearchSectrion from './component/SearchSection/SearchSection';
+import { useTodos } from './useTodos';
 
 function App() {
-  const [todos, setTodos] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+
+  const [searchTerm, setSearchTerm] = useState('')
+  const [sortEnabled, setSortEnabled] = useState(false)
+  const [sortOrder, setSortOrder] = useState('')
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
+
+  const {
+    todos,
+    loading,
+    error,
+    loadTodos,
+    addTodo,
+    handleToggleComplete,
+    DeleteTodo,
+    handleSaveEdit
+  } = useTodos();
 
   useEffect(() => {
-    setLoading(true)
-    fetch('https://jsonplaceholder.typicode.com/todos')
-      .then((res) => res.json())
-      .then((date) => {
-        setTodos(date.slice(0, 20))
-      })
-      .catch((err) => {
-        console.log(err)
-        setError('Ошибка при загрузке задач')
-      })
-      .finally(() => setLoading(false))
-  }, []);
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm)
+    }, 500)
 
+    return () => clearTimeout(timer)
+  }, [searchTerm])
 
+  const fetchTodo = () => {
+    const params = new URLSearchParams()
 
-  if (loading) {
-    return (
-      <div className="app">
-        <div className="loader-container">
-          <div className="loader"></div>
-          <p>Загрузка задач...</p>
-        </div>
-      </div>
-    );
+    if (searchTerm) {
+      params.append('title_like', searchTerm)
+    }
+    if (sortOrder && sortEnabled) {
+      params.append('_sort', 'title');
+      params.append('_order', sortOrder);
+    }
+    loadTodos(params)
+  }
+
+  useEffect(() => {
+    fetchTodo()
+  }, [debouncedSearchTerm, sortOrder]);
+
+  const handleSearchChange = (value) => {
+    setSearchTerm(value)
+  }
+
+  const handleClearSearch = () => {
+    setSearchTerm('')
+  }
+
+  const handleSortToggle = (checked) => {
+    setSort(checked)
+  }
+
+  const handleSortOrderChange = (order) => {
+    setSortOrder(order)
+  }
+  const setSort = (e) => {
+
+    if (sortOrder) {
+      setSortOrder('')
+      setSortEnabled(e)
+      return
+    }
+
+    setSortOrder('asc')
+    setSortEnabled(e)
   }
 
   if (error) {
@@ -38,7 +81,9 @@ function App() {
       <div className="app">
         <div className="error-container">
           <p className="error-message">{error}</p>
-          <button className="retry-button">
+          <button
+            onClick={fetchTodo}
+            className="retry-button">
             Попробовать снова
           </button>
         </div>
@@ -48,30 +93,36 @@ function App() {
 
   return (
     <div className="app">
-      <main className="todo-container">
-        <div className="todo-stats">
-          <span>Всего задач: {todos.length}</span>
-          <span>Выполнено: {todos.filter(todo => todo.completed).length}</span>
-        </div>
+      <SearchSectrion
+        searchTerm={searchTerm}
+        sortEnabled={sortEnabled}
+        sortOrder={sortOrder}
+        handleSearchChange={handleSearchChange}
+        handleClearSearch={handleClearSearch}
+        handleSortToggle={handleSortToggle}
+        handleSortOrderChange={handleSortOrderChange} />
 
-        <ul className="todo-list">
-          {todos.map(todo => (
-            <li key={todo.id} className={`todo-item ${todo.completed ? 'completed' : ''}`}>
-              <div className="todo-content">
-                <span className="todo-id">#{todo.id}</span>
-                <span className="todo-title">{todo.title}</span>
-              </div>
-              <div className="todo-status">
-                {todo.completed ?
-                  <span className="status-badge completed-badge">✓ Выполнено</span>
-                  :
-                  <span className="status-badge pending-badge">○ В процессе</span>
-                }
-              </div>
-            </li>
-          ))}
-        </ul>
-      </main>
+      <div className="app-content">
+
+        <main className="todo-container">
+
+          {loading ?
+
+            <div className="loader-container">
+              <div className="loader"></div>
+              <p>Загрузка задач...</p>
+            </div> : <TodoList
+              todos={todos}
+              handleToggleComplete={handleToggleComplete}
+              handleDelete={DeleteTodo}
+              handleSaveEdit={handleSaveEdit}
+            />}
+        </main>
+
+        <InputForCreateTodo handleCreate={addTodo} />
+      </div>
+
+
     </div>
   );
 }
