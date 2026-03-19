@@ -1,17 +1,16 @@
 // App.js
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import './App.css';
-import InputForCreateTodo from './component/InputForCreateTodo/InputForCreateTodo'
+import InputForCreateTodo from './component/InputForCreateTodo/InputForCreateTodo';
 import TodoList from './component/TodoList/TodoList';
 import SearchSectrion from './component/SearchSection/SearchSection';
 import { useTodos } from './useTodos';
 
 function App() {
-
-  const [searchTerm, setSearchTerm] = useState('')
-  const [sortEnabled, setSortEnabled] = useState(false)
-  const [sortOrder, setSortOrder] = useState('')
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortEnabled, setSortEnabled] = useState(false);
+  const [sortOrder, setSortOrder] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
 
   const {
     todos,
@@ -21,69 +20,73 @@ function App() {
     addTodo,
     handleToggleComplete,
     DeleteTodo,
-    handleSaveEdit
+    handleSaveEdit,
   } = useTodos();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm)
-    }, 500)
+      setDebouncedSearchTerm(searchTerm);
+    }, 500);
 
-    return () => clearTimeout(timer)
-  }, [searchTerm])
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
 
-  const fetchTodo = () => {
-    const params = new URLSearchParams()
+  const filteredTodos = useMemo(() => {
+    let result = [...todos];
 
-    if (searchTerm) {
-      params.append('title_like', searchTerm)
+    if (debouncedSearchTerm) {
+      result = result.filter((todo) =>
+        todo.title.toLowerCase().includes(debouncedSearchTerm.toLowerCase()),
+      );
     }
-    if (sortOrder && sortEnabled) {
-      params.append('_sort', 'title');
-      params.append('_order', sortOrder);
+
+    if (sortEnabled) {
+      result.sort((a, b) => {
+        return sortOrder === 'asc'
+          ? a.title.localeCompare(b.title)
+          : b.title.localeCompare(a.title);
+      });
     }
-    loadTodos(params)
-  }
+
+    return result;
+  }, [todos, debouncedSearchTerm, sortEnabled, sortOrder]);
 
   useEffect(() => {
-    fetchTodo()
-  }, [debouncedSearchTerm, sortOrder]);
+    loadTodos();
+  }, [loadTodos]);
 
   const handleSearchChange = (value) => {
-    setSearchTerm(value)
-  }
+    setSearchTerm(value);
+  };
 
   const handleClearSearch = () => {
-    setSearchTerm('')
-  }
+    setSearchTerm('');
+  };
 
   const handleSortToggle = (checked) => {
-    setSort(checked)
-  }
+    setSort(checked);
+  };
 
   const handleSortOrderChange = (order) => {
-    setSortOrder(order)
-  }
+    setSortOrder(order);
+  };
   const setSort = (e) => {
-
     if (sortOrder) {
-      setSortOrder('')
-      setSortEnabled(e)
-      return
+      setSortOrder('');
+      setSortEnabled(e);
+      return;
     }
 
-    setSortOrder('asc')
-    setSortEnabled(e)
-  }
+    setSortOrder('asc');
+    setSortEnabled(e);
+  };
 
   if (error) {
     return (
       <div className="app">
         <div className="error-container">
           <p className="error-message">{error}</p>
-          <button
-            onClick={fetchTodo}
-            className="retry-button">
+          <button onClick={loadTodos} className="retry-button">
             Попробовать снова
           </button>
         </div>
@@ -100,29 +103,28 @@ function App() {
         handleSearchChange={handleSearchChange}
         handleClearSearch={handleClearSearch}
         handleSortToggle={handleSortToggle}
-        handleSortOrderChange={handleSortOrderChange} />
+        handleSortOrderChange={handleSortOrderChange}
+      />
 
       <div className="app-content">
-
         <main className="todo-container">
-
-          {loading ?
-
+          {loading ? (
             <div className="loader-container">
               <div className="loader"></div>
               <p>Загрузка задач...</p>
-            </div> : <TodoList
-              todos={todos}
+            </div>
+          ) : (
+            <TodoList
+              todos={filteredTodos}
               handleToggleComplete={handleToggleComplete}
               handleDelete={DeleteTodo}
               handleSaveEdit={handleSaveEdit}
-            />}
+            />
+          )}
         </main>
 
         <InputForCreateTodo handleCreate={addTodo} />
       </div>
-
-
     </div>
   );
 }
