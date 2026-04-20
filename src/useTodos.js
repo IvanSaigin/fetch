@@ -33,7 +33,7 @@ export const useTodos = () => {
             const data = await getTodos(params);
             setTodos(data);
         } catch (err) {
-            setError(err.massage);
+            setError(err.message);
         } finally {
             setLoading(false);
         }
@@ -67,7 +67,7 @@ export const useTodos = () => {
                 })
 
             } catch (err) {
-                setError(err.massage);
+                setError(err.message);
                 setTodos((prev) => prev.filter(c => c.id !== newTodo.id))
             }
         })
@@ -102,7 +102,7 @@ export const useTodos = () => {
 
             } catch (err) {
 
-                setError(err.massage);
+                setError(err.message);
 
                 setTodos((prev) =>
                     prev.map((todo) =>
@@ -135,7 +135,7 @@ export const useTodos = () => {
 
             } catch (err) {
 
-                setError(err.massage);
+                setError(err.message);
 
                 setTodos((prev) => {
                     if (deletedTodo && !prev.some(t => t.id === id)) {
@@ -169,7 +169,7 @@ export const useTodos = () => {
             } catch (err) {
 
 
-                setError(err.massage);
+                setError(err.message);
 
                 setTodos(prev => prev.map(todo =>
                     todo.id === id ? { ...todo, title: originalTitle } : todo

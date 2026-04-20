@@ -1,0 +1,177 @@
+.wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.popap {
+    background-color: white;
+    border-radius: 12px;
+    padding: 15px;
+    height: auto;
+    padding-top: 30px;
+    width: 500px;
+    max-width: 90vw;
+    position: relative;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    animation: slideIn 0.3s ease-out;
+}
+
+.close-button {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #ff4444;
+    border: none;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.close-button:hover {
+    background-color: #cc0000;
+    transform: scale(1.05);
+}
+
+.close-button:active {
+    transform: scale(0.95);
+}
+
+.popap textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+    margin-bottom: 20px;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+
+.popap textarea:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
+
+.todo-actions {
+    display: flex;
+    justify-content: center;
+
+}
+
+.action-btn {
+    width: auto;
+    padding: 0px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.edit-btn {
+    background-color: #007bff;
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #0056b3;
+    transform: translateY(-1px);
+}
+
+.delete-btn {
+    background-color: #ff4444;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #cc0000;
+    transform: translateY(-1px);
+}
+
+.action-btn:active {
+    transform: translateY(0);
+}
+
+.lablepopap {
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 10px;
+}
+
+.action-btn.edit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+    /* Полностью отключает клики */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .popap {
+        width: 95vw;
+        padding: 20px;
+    }
+
+    .popap textarea {
+        min-height: 120px;
+    }
+
+    .action-btn {
+        padding: 8px 20px;
+        font-size: 13px;
+    }
+
+    .close-button {
+        width: 28px;
+        height: 28px;
+        font-size: 18px;
+    }
+}

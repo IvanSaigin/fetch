@@ -59,6 +59,9 @@
     color: #2d3748;
     line-height: 1.4;
     word-break: break-word;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 /* Status Badges */
