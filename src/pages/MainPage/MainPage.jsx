@@ -128,7 +128,10 @@ const MainPage = () => {
                 <InputForCreateTodo handleCreate={addTodo} />
             </div>
 
-            {isOpenModal && <Outlet />}
+            {isOpenModal && <Outlet context={{
+                DeleteTodo,
+                handleSaveEdit
+            }} />}
         </div>
     )
 }

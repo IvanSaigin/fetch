@@ -7,6 +7,7 @@ import ErrorPage from './pages/ErrorPage/ErrorPage';
 
 
 const App = () => (
+
   <Routes>
     <Route path='/' element={<MainPage />}>
       <Route path='/task/:id' element={<TodoPage />} />

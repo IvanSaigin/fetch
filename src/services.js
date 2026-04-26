@@ -21,3 +21,7 @@ export const editTodoService = async (id, title) => {
 export const deleteTodoService = async (id) => {
     return api.deleteTodo(id);
 };
+
+export const getTodoByIdService = async (id) => {
+    return api.getTodoById(id);
+}

@@ -177,7 +177,6 @@ export const useTodos = () => {
             }
         });
     }, [])
-
     return {
         todos: optimisticTodos,
         loading,

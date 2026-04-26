@@ -1,23 +1,50 @@
-import { Link, useParams, useLocation, useNavigate } from "react-router-dom"
+import { Link, useParams, useLocation, useNavigate, useOutletContext } from "react-router-dom"
 import { useTodos } from '../../useTodos';
 import './TodoPage.css'
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import { getTodoByIdService } from "../../services";
+import Loader from "../../component/Loader/Loader";
 const TodoPage = () => {
 
+    const { DeleteTodo, handleSaveEdit } = useOutletContext()
     const { id } = useParams()
     const location = useLocation()
     const navigate = useNavigate()
-    const todo = location.state?.todo
-    const { DeleteTodo, handleSaveEdit, loadTodos } = useTodos()
-    const [textTodo, setTextTodo] = useState(todo?.title)
+    const todostate = location.state?.todo
+
+    const [todo, setTodo] = useState(todostate || null)
+    const [textTodo, setTextTodo] = useState(todostate?.title || '')
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(null)
+
+    useEffect(() => {
+
+        if (todo) return
+
+        const fetchTodo = async () => {
+            try {
+                setLoading(true)
+                const data = await getTodoByIdService(id)
+                setTodo(data)
+                setTextTodo(data.title)
+                setLoading(false)
+            } catch (err) {
+                setError(err.message)
+            }
+            finally {
+                setLoading(false)
+            }
+        }
+        fetchTodo()
+
+    }, [id, todo])
 
 
-    if (!todo) {
+    if (error || !todo) {
         return (
             <div className="wrapper">
                 <div className="popap">
-                    <p>Ошибка: задача не передана</p>
+                    <p>Ошибка: {error}</p>
                     <Link to="/">
                         <button className="close-button">✕</button>
                     </Link>
@@ -26,23 +53,34 @@ const TodoPage = () => {
         )
     }
 
+    if (loading) {
+        return (
+            <div className="wrapper">
+                <div className="popap">
+                    <Loader />
+                    <Link to="/">
+                        <button className="close-button">✕</button>
+                    </Link>
+                </div>
+            </div>
+        )
+    }
+
+
+
     const handleDelete = async () => {
         await DeleteTodo(todo.id)
-        await loadTodos()
         navigate('/')
     }
 
     const setEditingId = async () => {
-
-
         await handleSaveEdit(todo.id, textTodo)
-        await loadTodos()
         navigate('/')
     }
 
 
     const disabled = !textTodo || !textTodo.trim()
-    console.log('textTodo:', textTodo, 'disabled:', disabled)
+
     return (
         <div className="wrapper">
             <div className="popap">

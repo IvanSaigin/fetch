@@ -49,3 +49,11 @@ export const deleteTodo = async (id) => {
 
     return respons.json();
 }
+
+export const getTodoById = async (id) => {
+
+    const respons = await fetch(`${BASE_URL}/${id}`);
+    if (!respons.ok) throw new Error('Ошибка запроса дела');
+
+    return respons.json();
+}
