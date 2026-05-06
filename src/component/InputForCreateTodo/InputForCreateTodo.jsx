@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import './InputForCreateTodo.css'
+import { useProvider } from '../../MainProvider';
 
-const InputForCreateTodo = React.memo(({ handleCreate }) => {
+const InputForCreateTodo = React.memo(() => {
     const [newTodoTitle, setNewTodoTitle] = useState('');
+
+    const { addTodo } = useProvider()
 
     const onSubmit = (e) => {
         e.preventDefault()
-        handleCreate(newTodoTitle)
+        addTodo(newTodoTitle)
         setNewTodoTitle('')
     }
 

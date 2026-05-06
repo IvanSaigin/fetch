@@ -1,12 +1,14 @@
-import { Link, useParams, useLocation, useNavigate, useOutletContext } from "react-router-dom"
+import { Link, useParams, useLocation, useNavigate } from "react-router-dom"
 import { useTodos } from '../../useTodos';
 import './TodoPage.css'
 import { useState, useEffect } from "react";
 import { getTodoByIdService } from "../../services";
 import Loader from "../../component/Loader/Loader";
+import { useProvider } from "../../MainProvider";
 const TodoPage = () => {
 
-    const { DeleteTodo, handleSaveEdit } = useOutletContext()
+    const { DeleteTodo, handleSaveEdit } = useProvider()
+
     const { id } = useParams()
     const location = useLocation()
     const navigate = useNavigate()
@@ -37,7 +39,7 @@ const TodoPage = () => {
         }
         fetchTodo()
 
-    }, [id, todo])
+    }, [id])
 
 
     if (error || !todo) {

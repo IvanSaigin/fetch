@@ -3,8 +3,11 @@ import React from 'react'
 import TodoItem from "../TodoItem/TodoItem"
 import './TodoList.css'
 import { Link } from 'react-router-dom'
+import { useProvider } from '../../MainProvider'
 
-const TodoList = React.memo(({ todos, handleToggleComplete }) => {
+const TodoList = React.memo(() => {
+
+    const { todos } = useProvider()
 
     return (
         <ul className="todo-list">
@@ -12,7 +15,6 @@ const TodoList = React.memo(({ todos, handleToggleComplete }) => {
                 <Link to={`task/${todo.id}`} state={{ todo }} key={todo.id}>
                     <TodoItem
                         todo={todo}
-                        handleToggleComplete={handleToggleComplete}
                     />
                 </Link>
             ))}

@@ -1,25 +1,21 @@
-const SearchSectrion = ({
-    searchTerm,
-    sortEnabled,
-    sortOrder,
-    handleSearchChange,
-    handleClearSearch,
-    handleSortToggle,
-    handleSortOrderChange
-}) => {
+import { useSearchContext } from "../../SearchProvider"
+const SearchSectrion = () => {
+
+    const { searchTerm, setSearchTerm, sortEnabled, setSort, sortOrder, setSortOrder, setSortEnabled } = useSearchContext()
+
     return <div className="search-section">
         <div className="search-wrapper">
             <input
                 type="text"
                 placeholder="Поиск задач..."
                 value={searchTerm}
-                onChange={(e) => handleSearchChange(e.target.value)}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="search-input"
             />
 
             <button
                 className="clear-search"
-                onClick={() => handleClearSearch('')}
+                onClick={() => setSearchTerm('')}
             >
                 ✕
             </button>
@@ -31,7 +27,7 @@ const SearchSectrion = ({
                 <input
                     type="checkbox"
                     checked={sortEnabled}
-                    onChange={(e) => handleSortToggle(e.target.checked)}
+                    onChange={(e) => setSort(e.target.checked)}
                 />
                 Сортировать по алфавиту
             </label>
@@ -40,14 +36,14 @@ const SearchSectrion = ({
             <div className="sort-buttons">
                 <button
                     className={`sort-btn ${sortOrder === 'asc' ? 'active' : ''}`}
-                    onClick={() => handleSortOrderChange('asc')}
+                    onClick={() => setSortOrder('asc')}
                     disabled={!sortEnabled}
                 >
                     ↑ А-Я
                 </button>
                 <button
                     className={`sort-btn ${sortOrder === 'desc' ? 'active' : ''}`}
-                    onClick={() => handleSortOrderChange('desc')}
+                    onClick={() => setSortOrder('desc')}
                     disabled={!sortEnabled}
                 >
                     ↓ Я-А

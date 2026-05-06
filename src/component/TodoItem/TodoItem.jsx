@@ -1,8 +1,10 @@
 import React from 'react'
 import './TodoItem.css'
+import { useProvider } from '../../MainProvider'
 
-const TodoItem = React.memo(({ todo, handleToggleComplete, }) => {
+const TodoItem = React.memo(({ todo }) => {
 
+    const { handleToggleComplete } = useProvider()
 
     return (
 
