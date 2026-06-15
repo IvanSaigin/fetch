@@ -15,9 +15,8 @@ const ErrorPage = () => {
         }
     }, [error]);
 
-    const fetchTodo = () => {
-        navigate('/');
-    }
+    const fetchTodo = () => navigate('/');
+
 
     return (
         <div className="app">

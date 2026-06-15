@@ -1,21 +1,31 @@
-import { useContext, useEffect, useState } from "react"
+import { useEffect } from "react"
+import { useDispatch, useSelector } from 'react-redux'
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
+
+import { selectTodos, selectLoading, selectError, selectDebouncedSearchTerm, selectSortEnabled, selectSortOrder } from '../../selectors'
+import { loadTodos } from '../../actions/actions-todos'
+
 import InputForCreateTodo from '../../component/InputForCreateTodo/InputForCreateTodo'
 import TodoList from '../../component/TodoList/TodoList';
 import SearchSectrion from '../../component/SearchSection/SearchSection';
 import Loader from '../../component/Loader/Loader'
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
-import { useProvider } from "../../MainProvider";
-import { useSearchContext } from "../../SearchProvider";
+
 
 const MainPage = () => {
 
+    const dispatch = useDispatch()
     const navigate = useNavigate()
     const location = useLocation()
     const isOpenModal = location.pathname.includes('/task/')
 
-    const { todos, loading, error, loadTodos, handleToggleComplete, addTodo, DeleteTodo, handleSaveEdit } = useProvider()
+    const todos = useSelector(selectTodos)
+    const loading = useSelector(selectLoading)
+    const error = useSelector(selectError)
 
-    const { debouncedSearchTerm, sortEnabled, sortOrder } = useSearchContext()
+    const debouncedSearchTerm = useSelector(selectDebouncedSearchTerm)
+    const sortEnabled = useSelector(selectSortEnabled)
+    const sortOrder = useSelector(selectSortOrder)
+
 
     const fetchTodo = () => {
         const params = new URLSearchParams()
@@ -27,7 +37,7 @@ const MainPage = () => {
             params.append('_sort', 'title');
             params.append('_order', sortOrder);
         }
-        loadTodos(params)
+        dispatch(loadTodos(params))
     }
 
     useEffect(() => {

@@ -1,0 +1,1 @@
+export const selectDebouncedSearchTerm = ({ search }) => search.debouncedSearchTerm

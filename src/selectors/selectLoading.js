@@ -1,0 +1,1 @@
+export const selectLoading = ({ todos }) => todos.loading

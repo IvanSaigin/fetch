@@ -1,0 +1,1 @@
+export const selectSortOrder = ({ search }) => search.sortOrder

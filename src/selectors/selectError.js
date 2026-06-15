@@ -1,0 +1,1 @@
+export const selectError = ({ todos }) => todos.error

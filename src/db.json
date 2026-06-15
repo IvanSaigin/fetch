@@ -1,19 +1,9 @@
 {
   "todo": [
     {
-      "title": "123123",
+      "title": "qwe",
       "completed": false,
-      "id": 2
-    },
-    {
-      "title": "123",
-      "completed": false,
-      "id": 3
-    },
-    {
-      "title": "asdfsgd",
-      "completed": false,
-      "id": 4
+      "id": 5
     }
   ]
 }

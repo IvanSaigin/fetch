@@ -1,0 +1,1 @@
+export const selectSearchTerm = ({ search }) => search.searchTerm

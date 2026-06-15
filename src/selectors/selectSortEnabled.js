@@ -1,0 +1,1 @@
+export const selectSortEnabled = ({ search }) => search.sortEnabled

@@ -1,11 +1,11 @@
 import React from 'react'
 import './TodoItem.css'
-import { useProvider } from '../../MainProvider'
+import { handleToggleComplete } from '../../actions/actions-todos'
+import { useDispatch } from 'react-redux'
 
 const TodoItem = React.memo(({ todo }) => {
 
-    const { handleToggleComplete } = useProvider()
-
+    const dispatch = useDispatch()
     return (
 
         <li className={`todo-item ${todo.completed ? 'completed' : ''}`} >
@@ -15,7 +15,7 @@ const TodoItem = React.memo(({ todo }) => {
                     <input
                         type="checkbox"
                         checked={todo.completed}
-                        onChange={() => handleToggleComplete(todo.id)}
+                        onChange={() => dispatch(handleToggleComplete(todo.id))}
                         className="todo-checkbox-input"
                     />
                 </div>

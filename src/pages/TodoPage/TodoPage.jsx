@@ -1,13 +1,14 @@
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom"
-import { useTodos } from '../../useTodos';
 import './TodoPage.css'
-import { useState, useEffect } from "react";
-import { getTodoByIdService } from "../../services";
-import Loader from "../../component/Loader/Loader";
-import { useProvider } from "../../MainProvider";
+import { useState, useEffect } from "react"
+import { getTodoByIdService } from "../../services"
+import Loader from "../../component/Loader/Loader"
+import { useDispatch } from 'react-redux'
+import { deleteTodo, handleSaveEdit } from '../../actions/actions-todos'
+
 const TodoPage = () => {
 
-    const { DeleteTodo, handleSaveEdit } = useProvider()
+    const dispatch = useDispatch()
 
     const { id } = useParams()
     const location = useLocation()
@@ -20,7 +21,6 @@ const TodoPage = () => {
     const [error, setError] = useState(null)
 
     useEffect(() => {
-
         if (todo) return
 
         const fetchTodo = async () => {
@@ -29,18 +29,14 @@ const TodoPage = () => {
                 const data = await getTodoByIdService(id)
                 setTodo(data)
                 setTextTodo(data.title)
-                setLoading(false)
             } catch (err) {
                 setError(err.message)
-            }
-            finally {
+            } finally {
                 setLoading(false)
             }
         }
         fetchTodo()
-
     }, [id])
-
 
     if (error || !todo) {
         return (
@@ -68,18 +64,15 @@ const TodoPage = () => {
         )
     }
 
-
-
-    const handleDelete = async () => {
-        await DeleteTodo(todo.id)
+    const handleDelete = () => {
+        dispatch(deleteTodo(todo.id))  // ← ДОБАВИТЬ dispatch!
         navigate('/')
     }
 
-    const setEditingId = async () => {
-        await handleSaveEdit(todo.id, textTodo)
+    const handleSave = () => {
+        dispatch(handleSaveEdit(todo.id, textTodo))  // ← ДОБАВИТЬ dispatch!
         navigate('/')
     }
-
 
     const disabled = !textTodo || !textTodo.trim()
 
@@ -89,20 +82,19 @@ const TodoPage = () => {
                 <div className="lablepopap">Редактирование задачи</div>
                 <Link to="/"><button className="close-button">✕</button></Link>
                 <textarea
-
                     value={textTodo}
                     onChange={(e) => setTextTodo(e.target.value)}
                 />
                 <div className="todo-actions">
                     <button
                         disabled={disabled}
-                        onClick={() => setEditingId(todo.id)}
+                        onClick={handleSave}  // ← Изменил название
                         className="action-btn edit-btn"
                         title="Редактировать">
                         Сохранить задачу
                     </button>
                     <button
-                        onClick={() => handleDelete(todo.id)}
+                        onClick={handleDelete}
                         className="action-btn delete-btn"
                         title="Удалить">
                         Удалить задачу

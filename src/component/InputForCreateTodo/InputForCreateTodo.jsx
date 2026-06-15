@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux'
 import './InputForCreateTodo.css'
-import { useProvider } from '../../MainProvider';
+import { addTodo } from '../../actions/actions-todos'
 
 const InputForCreateTodo = React.memo(() => {
     const [newTodoTitle, setNewTodoTitle] = useState('');
 
-    const { addTodo } = useProvider()
+    const dispatch = useDispatch()
 
     const onSubmit = (e) => {
         e.preventDefault()
-        addTodo(newTodoTitle)
+        dispatch(addTodo(newTodoTitle))
         setNewTodoTitle('')
     }
 
